@@ -14,14 +14,19 @@ public class OverworldCamera : MonoBehaviour {
 	void Awake ()
     {
         centerPoint = transform.GetChild(0); // Make sure i't the first child
-        oldPos = player.position + centerPoint.localPosition; 
-	}
+        oldPos = player.position + centerPoint.localPosition;
+        transform.position = oldPos;
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
         oldPos = transform.position;
 
-        transform.position = Vector3.Lerp(oldPos, player.position - centerPoint.localPosition, Time.deltaTime * lerpSpringiness);
-	}
+        if (StateMachine.CurrentPlayState == PlayState.OverWorld)
+        {
+            transform.position = Vector3.Lerp(oldPos, player.position - centerPoint.localPosition, Time.deltaTime * lerpSpringiness);
+
+        }
+    }
 }
