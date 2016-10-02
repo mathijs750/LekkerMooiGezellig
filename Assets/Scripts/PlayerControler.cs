@@ -62,7 +62,7 @@ public class PlayerControler : MonoBehaviour
     {
         isColliding = true;
         Debug.Log(coll.gameObject.name);
-        GameManager.activateDialogue(coll.gameObject);
+        GameManager.Instance.activateDialogue(coll.gameObject);
     }
 
     public void OnCollisonExit2D(Collision2D coll)

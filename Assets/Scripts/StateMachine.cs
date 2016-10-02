@@ -65,7 +65,7 @@ public class StateMachine : MonoBehaviour
         GameState prevState = gameState;
         gameState = newState;
 
-        Debug.Log("Changing from: " + prevState.ToString() + " to: " + newState.ToString());
+        //Debug.Log("Changing from: " + prevState.ToString() + " to: " + newState.ToString());
     
         if (onGameStateChanged != null) { onGameStateChanged(prevState, gameState); }
     }
@@ -75,7 +75,7 @@ public class StateMachine : MonoBehaviour
         PlayState prevState = playState;
         playState = newState;
 
-        Debug.Log("Changing from: " + prevState.ToString() + " to: " + newState.ToString());
+        //Debug.Log("Changing from: " + prevState.ToString() + " to: " + newState.ToString());
 
         if (onPlayStateChanged != null) { onPlayStateChanged(prevState, playState); }
     }
