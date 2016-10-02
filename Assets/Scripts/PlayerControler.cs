@@ -1,102 +1,161 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class PlayerControler : MonoBehaviour
 {
     [SerializeField, Range(1, 20f)]
-    private float walkSpeed = 1f;
-    private BoxCollider2D coll;
-    private Rigidbody2D rb;
-    private bool isColliding;
+    private float StepTreshold = 1f;
 
-    // Use this for initialization
-    void OnEnable()
-    {
-        coll = GetComponent<BoxCollider2D>();
-        rb = GetComponent<Rigidbody2D>();
-    }
+    private SpriteControler spriteCon;
+    private Vector2 newPos;
+    /// Left w, Down x, Right y, Up z
+    private Vector4 times = Vector4.zero;
+    private bool isMoving;
 
     // Update is called once per frame
     void Update()
     {
         if (StateMachine.CurrentGameState == GameState.Playing && StateMachine.CurrentPlayState == PlayState.OverWorld)  //NPC = layer 8
         {
-            rb.AddForce(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * walkSpeed);
-            //transform.position += new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * (Time.deltaTime * walkSpeed);
-            //Vector2 moveDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            Vector2 input = movementInput();
+            if (isNotBlocked(input)) { newPos += input; }
 
-            /*
-            if (!isTouchingInDirection(moveDirection))
+            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime + .2f);
+            if (Mathf.Floor(Vector3.Magnitude(transform.position - new Vector3(newPos.x, newPos.y, 0)) * 1000) > 0)
             {
-                transform.position += new Vector3(moveDirection.x, moveDirection.y, 0);
-            }*/
+                isMoving = true;
+            }
+            else
+            {
+                isMoving = false;
+                transform.position = newPos;
+            }
+
         }
-
-
-    }
-    /*
-    bool isTouchingInDirection(Vector2 direction)
-    {
-        int layerMask = 1 << 9;
-        float angle = Vector2.Angle(Vector2.right, direction);
-        angle = Mathf.RoundToInt(angle);
-
-
-
-       // if (Physics2D.Raycast())
-
-        return false;
     }
 
 
-    Vector3 allignToGrid(Vector3 inPos)
-    {
-        inPos.x = Mathf.Round(inPos.x);
-        inPos.y = Mathf.Round(inPos.y);
-        inPos.z = Mathf.Round(inPos.z);
-        return inPos;
-    }
-    */
 
-    public void OnCollisionEnter2D(Collision2D coll)
+    void OnEnable()
     {
-        isColliding = true;
-        Debug.Log(coll.gameObject.name);
-        GameManager.Instance.activateDialogue(coll.gameObject);
+        newPos = transform.position;
+        spriteCon = transform.GetChild(0).GetComponent<SpriteControler>();
+        isMoving = false;
     }
 
-    public void OnCollisonExit2D(Collision2D coll)
+    private bool isNotBlocked(Vector2 input)
     {
-        isColliding = false;
-        Debug.Log("HO!");
-    }
+        // the "most" best way
+        RaycastHit2D hitA = Physics2D.Raycast(transform.position + new Vector3(-0.5f, 0.5f, 0), input, 1, 1 << 9);
+        RaycastHit2D hitB = Physics2D.Raycast(transform.position + new Vector3(0.5f, 0.5f, 0), input, 1, 1 << 9);
+        RaycastHit2D hitC = Physics2D.Raycast(transform.position + new Vector3(-0.5f, -0.5f, 0), input, 1, 1 << 9);
+        RaycastHit2D hitD = Physics2D.Raycast(transform.position + new Vector3(0.5f, -0.5f, 0), input, 1, 1 << 9);
 
-
-    /*
-    Vector3 ManhatanizeVector3(Vector3 movement, float intervalSize)
-    {
-        Vector3 manVec = new Vector3();
-        if (movement.x <= 0)
+        if (hitA || hitB || hitC || hitD)
         {
-            manVec.x = Mathf.Floor(movement.x / intervalSize) * intervalSize;
+            return false;
         }
         else
         {
-            manVec.x = Mathf.Ceil(movement.x / intervalSize) * intervalSize;
+            return true;
         }
-
-        if (movement.y <= 0)
-        {
-            manVec.y = Mathf.Floor(movement.y / intervalSize) * intervalSize;
-        }
-        else
-        {
-            manVec.y = Mathf.Ceil(movement.y / intervalSize) * intervalSize;
-        }
-
-        manVec.z = movement.z;
-        return manVec;
     }
-    */
+
+    private Vector2 movementInput()
+    {
+        Vector2 pos = Vector2.zero;
+
+        // Button ups
+        //////////////
+
+        if (Input.GetButtonUp("Left"))
+        {
+            if (times.w > 0 && !isMoving)
+            {
+                spriteCon.Direction = spriteDirection.left;
+            }
+            times.w = 0;
+        }
+
+        else if (Input.GetButtonUp("Right"))
+        {
+            {
+                spriteCon.Direction = spriteDirection.right;
+            }
+            times.y = 0;
+
+        }
+
+        if (Input.GetButtonUp("Up"))
+        {
+            if (times.z > 0 && !isMoving)
+            {
+                spriteCon.Direction = spriteDirection.up;
+            }
+            times.z = 0;
+
+        }
+
+        else if (Input.GetButtonUp("Down"))
+        {
+            if (times.x > 0 && !isMoving)
+            {
+                spriteCon.Direction = spriteDirection.down;
+            }
+            times.x = 0;
+
+        }
+
+        // Button presses
+        /////////////////
+
+        if (Input.GetButton("Left"))
+        {
+            times.w++;
+            if (times.w > StepTreshold)
+            {
+                isMoving = true;
+                spriteCon.Direction = spriteDirection.left;
+                pos += Vector2.left;
+                times.w = 0;
+            }
+        }
+        else if (Input.GetButton("Right"))
+        {
+            times.y++;
+            if (times.y > StepTreshold)
+            {
+                isMoving = true;
+                spriteCon.Direction = spriteDirection.right;
+                pos += Vector2.right;
+                times.y = 0;
+            }
+        }
+        else if (Input.GetButton("Up"))
+        {
+            times.z++;
+            if (times.z > StepTreshold)
+            {
+                isMoving = true;
+                spriteCon.Direction = spriteDirection.up;
+                pos += Vector2.up;
+                times.z = 0;
+            }
+        }
+        else if (Input.GetButton("Down"))
+        {
+            times.x++;
+            if (times.x > StepTreshold)
+            {
+                isMoving = true;
+                spriteCon.Direction = spriteDirection.down;
+                pos += Vector2.down;
+                times.x = 0;
+            }
+        }
+
+        return pos;
+    }
 
 }
