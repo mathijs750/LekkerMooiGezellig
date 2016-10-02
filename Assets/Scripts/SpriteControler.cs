@@ -40,7 +40,7 @@ public class SpriteControler : MonoBehaviour
             else { animTime++; }
         }
         changeSprite(animTime);
-        Debug.Log(animTime);
+   //     Debug.Log(animTime);
     }
 
     private void changeSprite(int time)
