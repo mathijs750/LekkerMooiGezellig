@@ -34,14 +34,10 @@ public struct NpcOverworldQuestion
 
 public class NpcControler : MonoBehaviour
 {
-    [SerializeField]
-    private bool asksOverworldQuestion;
-    [SerializeField]
-    private string overworldDialogue;
-    [SerializeField]
-    private NpcOverworldQuestion[] question;
-    [SerializeField]
-    private QuestionType correctAnswer;
+    public bool asksOverworldQuestion;
+    public string overworldDialogue;
+    public NpcOverworldQuestion[] question;
+    public QuestionType correctAnswer;
     /*
     [SerializeField]
     private ResponseType preferedResponse;
@@ -55,9 +51,10 @@ public class NpcControler : MonoBehaviour
     
     public void Interact(Vector3 lookPos)
     {
-
+        // TODO: look at the player when spoken to
 
         Debug.Log("!");
+        GameManager.Instance.activateDialogue(this);
     }
 
     void Awake()
@@ -65,9 +62,4 @@ public class NpcControler : MonoBehaviour
         spriteCon = transform.GetChild(0).GetComponent<SpriteControler>();
     }
 
-
-    void Update()
-    {
-
-    }
 }

@@ -64,6 +64,7 @@ public class WindowLayerControler : MonoBehaviour
         if (yesNo != null) { yesNoTextArea = yesNo.GetChild(0); }
 
         dialogueTextCharacters = makeTextArray(dialogueTextArea);
+        Debug.Log("texArealength: " + dialogueTextCharacters.Length);
     }
 
     void OnEnable()

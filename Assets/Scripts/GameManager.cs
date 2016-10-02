@@ -8,10 +8,11 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance = null;
 
-    public void activateDialogue(GameObject npc)
+    public void activateDialogue(NpcControler npc)
     {
         StateMachine.setPlayState(PlayState.Dialogue);
-        windowLayer.setDialogue("Hello world, and other places how are you doing today?");
+        windowLayer.setDialogue(npc.overworldDialogue);
+
     }
 
     void Awake()
