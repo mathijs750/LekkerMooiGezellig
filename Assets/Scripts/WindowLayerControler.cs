@@ -4,6 +4,9 @@ using System.Collections;
 public class WindowLayerControler : MonoBehaviour
 {
     [SerializeField]
+    private Sprite[] letterSprites;
+
+    [SerializeField]
     private Transform dialogue, yesNo;
     private Transform dialogueTextArea, yesNoTextArea;
 
