@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     {
         if (prevState == GameState.MainMenu && curState == GameState.Playing)
         {
-            Debug.Log("The Game is started");
+           // Debug.Log("The Game is started");
         }
     }
 
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     {
         if (prevState == PlayState.OverWorld && curState == PlayState.Dialogue)
         {
-            Debug.Log("BABBEL TIJD!!!!!");
+           // Debug.Log("BABBEL TIJD!!!!!");
         }
     }
 }
