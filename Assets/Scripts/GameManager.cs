@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public void activateDialogue(NpcControler npc)
     {
         StateMachine.setPlayState(PlayState.Dialogue);
-        windowLayer.setDialogue(npc.overworldDialogue);
+        windowLayer.setDialogue("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc elit risus, facilisis a hendrerit eleifend, cursus vel mauris. Mauris pellentesque.");
 
     }
 

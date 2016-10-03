@@ -32,13 +32,18 @@ public struct NpcOverworldQuestion
     public string dialogue;
 }
 
+[RequireComponent(typeof(DialogueData))]
 public class NpcControler : MonoBehaviour
 {
+    private SpriteControler spriteCon;
+    private DialogueData data;
+
+    /*
     public bool asksOverworldQuestion;
     public string overworldDialogue;
     public NpcOverworldQuestion[] question;
     public QuestionType correctAnswer;
-    /*
+    
     [SerializeField]
     private ResponseType preferedResponse;
     [SerializeField]
@@ -47,7 +52,7 @@ public class NpcControler : MonoBehaviour
     [SerializeField]
     private NpcResponse[] responses;
     */
-    private SpriteControler spriteCon;
+   
     
     public void Interact(Vector3 lookPos)
     {
