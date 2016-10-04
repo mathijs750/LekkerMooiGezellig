@@ -5,13 +5,18 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private WindowLayerControler windowLayer;
+    [SerializeField]
+    private OverworldCamera cam;
 
     public static GameManager Instance = null;
 
-    public void activateDialogue(NpcControler npc)
+    public void activateDialogue(DialogueData data, GameObject npc)
     {
+        windowLayer.setDialogueData(data);
         StateMachine.setPlayState(PlayState.Dialogue);
-        windowLayer.setDialogue("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc elit risus, facilisis a hendrerit eleifend, cursus vel mauris. Mauris pellentesque.");
+       // Debug.Log("Starting the dialogue from: " + npc.name);
+        
+        //windowLayer.setDialogue("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc elit risus, facilisis a hendrerit eleifend, cursus vel mauris. Mauris pellentesque.");
 
     }
 
@@ -28,7 +33,18 @@ public class GameManager : MonoBehaviour
 
         StateMachine.setGameState(GameState.Playing); // for debugging
         StateMachine.setPlayState(PlayState.OverWorld);
+
+        windowLayer.setOverworldCam(cam);
+
+        
     }
+
+    /*
+    void Start()
+    {
+        StateMachine.setPlayState(PlayState.Dialogue);
+        StateMachine.setDialogueState(DialogueState.StartQuestion);
+    }*/
 
     void OnDisable()
     {
@@ -49,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         if (prevState == PlayState.OverWorld && curState == PlayState.Dialogue)
         {
-           // Debug.Log("BABBEL TIJD!!!!!");
+            StateMachine.setDialogueState(DialogueState.StartInto);
         }
     }
 }

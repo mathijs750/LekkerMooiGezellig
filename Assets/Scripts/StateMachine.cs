@@ -45,27 +45,41 @@ public enum PlayState
     Battle
 }
 
+public enum DialogueState
+{
+    StartInto,
+    StartQuestion,
+    StartQuestionResponse,
+    BattleIntro,
+    BattleQuestion,
+    BattleWin,
+    BattleLose,
+    BattleNeutral,
+    BattleRewardExplain
+}
+
 public class StateMachine : MonoBehaviour
 {
     public delegate void GameStateChanged(GameState prevState, GameState newState);
     public delegate void PlayStateChanged(PlayState prevState, PlayState newState);
+    public delegate void DialogueStateChanged(DialogueState prevState, DialogueState newState);
 
     public static event GameStateChanged onGameStateChanged;
     public static event PlayStateChanged onPlayStateChanged;
-
+    public static event DialogueStateChanged onDialogueStateChanged;
 
     private static GameState gameState;
     private static PlayState playState;
+    private static DialogueState dialogueState;
 
     public static GameState CurrentGameState { get { return gameState; }}
     public static PlayState CurrentPlayState { get { return playState; }}
+    public static DialogueState CurrentDialogueState { get { return dialogueState; } }
 
     public static void setGameState(GameState newState)
     {
         GameState prevState = gameState;
         gameState = newState;
-
-        //Debug.Log("Changing from: " + prevState.ToString() + " to: " + newState.ToString());
     
         if (onGameStateChanged != null) { onGameStateChanged(prevState, gameState); }
     }
@@ -75,8 +89,14 @@ public class StateMachine : MonoBehaviour
         PlayState prevState = playState;
         playState = newState;
 
-        //Debug.Log("Changing from: " + prevState.ToString() + " to: " + newState.ToString());
-
         if (onPlayStateChanged != null) { onPlayStateChanged(prevState, playState); }
+    }
+
+    public static void setDialogueState(DialogueState newState)
+    {
+        DialogueState prevState = dialogueState;
+        dialogueState = newState;
+
+        if (onDialogueStateChanged != null) { onDialogueStateChanged(prevState, dialogueState); }
     }
 }
