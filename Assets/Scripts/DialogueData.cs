@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public enum PlayerResponseType
 {
-    Default,
     Lekker,
     Mooi,
     Gezellig,

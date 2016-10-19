@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         if (prevState == PlayState.OverWorld && curState == PlayState.Dialogue)
         {
-            StateMachine.setDialogueState(DialogueState.StartInto);
+            StateMachine.setDialogueState(DialogueState.DialogueInto);
         }
     }
 }
